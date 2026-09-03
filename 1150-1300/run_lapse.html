@@ -83,7 +83,28 @@ h1,h2,h3{color:#f5fdff!important;text-shadow:0 0 10px rgba(32,217,255,.25)!impor
   text-align:left!important;
 }
 </style>
-</head>
+<style id="user-background">
+html,body{min-height:100%!important;margin:0!important}
+body{background-color:#020714!important;background-image:url("../background.png")!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;background-attachment:fixed!important}
+</style>
+
+<style id="small-start-status">
+#small-start-status{
+ position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+ z-index:2147483646;width:245px;min-height:105px;box-sizing:border-box;
+ padding:10px 12px;border:1px solid rgba(32,217,255,.75);
+ border-radius:10px;background:rgba(2,7,18,.82);
+ box-shadow:0 0 18px rgba(32,217,255,.16),inset 0 0 12px rgba(32,217,255,.05);
+ color:#eafcff;font:12px Arial,sans-serif;display:none;
+}
+#small-start-status .st{font-size:11px;color:#55eaff;margin-bottom:7px}
+#small-start-status .row{line-height:18px;color:#ccecf5}
+#small-start-status .ok{color:#5cff8a}
+</style>
+<style id="keep-original-background">html,body{min-height:100%;margin:0}body{background:#020714 url("../background.png") center/cover no-repeat fixed!important}</style><style id="exact-user-background">
+html,body{min-height:100%!important;margin:0!important;background:#020714!important;}
+body{background-image:url("../background.jpg")!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;background-attachment:fixed!important;}
+</style></head>
 <body>
 <div id="wrap">
   <div id="state">loading lapse chain...</div>
@@ -126,5 +147,14 @@ h1,h2,h3{color:#f5fdff!important;text-shadow:0 0 10px rgba(32,217,255,.25)!impor
 <script>
 (function(){var ratings={"9.00":95,"9.03":92,"9.04":92,"9.50":90,"9.60":90,"10.00":90,"10.01":90,"10.50":87,"10.70":86,"10.71":86,"11.00":88,"11.02":87,"11.50":82,"11.51":82,"11.52":82,"11.60":81,"11.70":80,"11.80":79,"12.00":78,"12.50":73,"12.70":72,"12.71":72,"12.72":71,"13.00":68},box=document.getElementById('device-stability'),val=document.getElementById('device-stability-value'),shown=false;function fw(){var t=(document.body&&document.body.innerText)||'';var m=t.match(/(?:PS4|PlayStation 4)[^0-9]*(9\.00|9\.03|9\.04|9\.50|9\.60|10\.00|10\.01|10\.50|10\.70|10\.71|11\.00|11\.02|11\.50|11\.51|11\.52|11\.60|11\.70|11\.80|12\.00|12\.50|12\.70|12\.71|12\.72|13\.00)/);return m?m[1]:null}function show(){if(shown)return;var k=fw();if(!k){var u=navigator.userAgent.match(/PlayStation 4[\/ ]([0-9]+)\.([0-9]+)/i);if(u){var n=u[1]+'.'+u[2];k=ratings[n]?n:null}}if(!k)return;val.textContent=ratings[k]+'%';box.style.display='block';shown=true}function successText(){var t=((document.body&&document.body.innerText)||'').toLowerCase();return /jailbreak complete|jailbreak completed|achieved jailbreak|already jailbroken|jailbreak success|payload.*(loaded|running|success)|goldhen.*(loaded|success)|kpatched/.test(t)}function check(){if(successText())show()}var oldSuccess=window.jailbreakSuccess;window.jailbreakSuccess=function(){if(typeof oldSuccess==='function')try{oldSuccess.apply(this,arguments)}catch(e){}show()};setInterval(check,350);new MutationObserver(check).observe(document.body,{subtree:true,childList:true,characterData:true})})();
 </script>
+
+
+<div id="small-start-status" aria-hidden="true">
+  <div class="st">STATUS: <span>READY</span></div>
+  <div class="row">[+] Init</div>
+  <div class="row">[+] Patch</div>
+  <div class="row">[+] Payload</div>
+  <div class="row ok">✓ Done!</div>
+</div>
 </body>
 </html>
