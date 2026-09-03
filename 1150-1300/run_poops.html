@@ -25,7 +25,65 @@
 <style id="global-background-fix">
 html,body{min-height:100%;margin:0;}
 body{background-color:#020711 !important;background-image:url("../background.png") !important;background-size:cover !important;background-position:center center !important;background-repeat:no-repeat !important;background-attachment:fixed !important;}
-</style></head>
+</style>
+<style id="pro-theme">
+:root{
+  --accent:#20d9ff;
+  --accent2:#1680ff;
+  --panel:rgba(3,10,28,.72);
+  --panel2:rgba(2,7,20,.84);
+  --line:rgba(32,217,255,.48);
+  --text:#eefaff;
+  --muted:#9fc6d9;
+}
+html,body{min-height:100%;margin:0;}
+body{
+  color:var(--text)!important;
+  background-color:#020714!important;
+  background-size:cover!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
+  background-attachment:fixed!important;
+  font-family:Arial,sans-serif!important;
+}
+button,input,select{font-family:Arial,sans-serif!important;}
+button{
+  border:1px solid var(--line)!important;
+  border-radius:10px!important;
+  background:linear-gradient(180deg,rgba(20,132,255,.28),rgba(3,19,48,.72))!important;
+  color:#fff!important;
+  box-shadow:0 0 12px rgba(32,217,255,.12),inset 0 0 10px rgba(32,217,255,.06)!important;
+  transition:transform .12s,box-shadow .12s!important;
+}
+button:hover,button:focus{
+  transform:translateY(-1px);
+  box-shadow:0 0 18px rgba(32,217,255,.28),inset 0 0 12px rgba(32,217,255,.08)!important;
+}
+h1,h2,h3{color:#f5fdff!important;text-shadow:0 0 10px rgba(32,217,255,.25)!important;}
+#console,.console,.log,.output,[id*="console"],[class*="console"]{
+  box-sizing:border-box!important;
+  background:linear-gradient(180deg,rgba(2,8,24,.78),rgba(1,5,16,.88))!important;
+  border:1px solid var(--line)!important;
+  border-radius:12px!important;
+  box-shadow:0 0 22px rgba(0,0,0,.42),0 0 18px rgba(32,217,255,.10)!important;
+  color:#d9f8ff!important;
+}
+</style>
+
+<style id="compact-log-theme">
+#console{
+  width:min(760px,82vw)!important;
+  height:min(330px,48vh)!important;
+  max-height:48vh!important;
+  margin:14px auto!important;
+  padding:12px!important;
+  overflow:auto!important;
+  font-size:12px!important;
+  line-height:1.18!important;
+  text-align:left!important;
+}
+</style>
+</head>
 <body>
 <div id="wrap">
   <div id="state">loading poops chain...</div>
