@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" manifest="cache.appcache">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -22,7 +22,10 @@
 </style>
   <link rel="stylesheet" href="../theme.css">
 <link rel="stylesheet" href="../unified-theme.css">
-</head>
+<style id="global-background-fix">
+html,body{min-height:100%;}
+body{background-image:url("../background.png") !important;background-size:cover !important;background-position:center center !important;background-repeat:no-repeat !important;background-attachment:fixed !important;}
+</style></head>
 <body>
 <div id="wrap">
   <div id="state">loading lapse chain...</div>
