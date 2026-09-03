@@ -1,0 +1,27 @@
+/* TRANSPARENT WALLPAPER UI - visual only */
+html,body{width:100%!important;min-height:100%!important;margin:0!important}
+body{background:url('../background.png') center center/cover no-repeat fixed!important;}
+/* root page uses local background */
+body{background-image:url('background.png')!important;background-color:transparent!important}
+/* Keep the wallpaper visible; UI surfaces are intentionally translucent. */
+.container,#wrap,.wrap,.main-container,.main-layout,.page,.app,.panel,.card,.box,.action,.logbox,#console,#brand,.menu{
+  background-color:rgba(3,8,18,.18)!important;
+  background-image:none!important;
+  border-color:rgba(120,190,255,.42)!important;
+  box-shadow:0 8px 28px rgba(0,0,0,.20),inset 0 0 22px rgba(70,150,255,.035)!important;
+}
+#brand{background-color:rgba(3,8,18,.12)!important}
+#console,.console,.log,.output,[id*="console"],[class*="console"]{background-color:rgba(2,7,16,.24)!important}
+button,.button,.btn,a.button{background:rgba(20,95,190,.48)!important;border:1px solid rgba(120,205,255,.55)!important;box-shadow:0 5px 16px rgba(0,0,0,.22)!important}
+input,select,textarea{background:rgba(1,7,15,.25)!important}
+body:before{background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.12))!important;opacity:1!important}
+body:after{background:none!important}
+/* Compact centered panel */
+body{display:flex!important;align-items:center!important;justify-content:center!important;overflow-x:hidden!important;padding:8px!important;box-sizing:border-box!important}
+#wrap,.wrap,.container,.main-container,.main-layout,.page,.app{width:min(360px,82vw)!important;max-width:360px!important;min-width:0!important;margin:0 auto!important}
+.container{min-height:0!important;padding:8px!important}
+.main-title,h1,.title,#state{font-size:18px!important;line-height:1.2!important}
+button,.btn,.button,a.button{min-height:30px!important;padding:6px 10px!important;font-size:12px!important}
+.logbox{width:100%!important;max-width:340px!important;height:105px!important;margin:6px auto!important}
+#console{max-width:100%!important;max-height:105px!important;font-size:9px!important;line-height:1.25!important}
+@media(max-height:650px){body{padding:5px!important}.logbox{height:90px!important}.main-title,h1,.title,#state{font-size:17px!important}}
