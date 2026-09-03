@@ -105,7 +105,26 @@ body{background-color:#020714!important;background-image:url("../background.png"
 <style id="keep-original-background">html,body{min-height:100%;margin:0}body{background:#020714 url("../background.png") center/cover no-repeat fixed!important}</style><style id="exact-user-background">
 html,body{min-height:100%!important;margin:0!important;background:#020714!important;}
 body{background-image:url("../background.jpg")!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;background-attachment:fixed!important;}
-</style></head>
+</style>
+<style id="small-1200-output-fix">
+/* 12.00/11.50-13.00 compact status/log window */
+#out{
+  width:min(230px,62vw)!important;
+  height:min(100px,18vh)!important;
+  max-height:18vh!important;
+  margin:8px auto!important;
+  padding:7px 8px!important;
+  box-sizing:border-box!important;
+  overflow:auto!important;
+  font:9px/1.15 Consolas,monospace!important;
+  border-radius:9px!important;
+}
+#state{
+  font-size:12px!important;
+  margin:0 0 5px!important;
+}
+</style>
+</head>
 <body>
 <div id="wrap">
   <div id="state">detecting firmware...</div>
