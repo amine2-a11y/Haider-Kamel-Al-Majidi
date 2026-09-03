@@ -86,7 +86,6 @@ CACHE MANIFEST
 900/rop/900.mjs
 900/send.mjs
 background-music.js
-background.png
 extras/badhoist-6.72/672entrypoint.js
 extras/badhoist-6.72/672kexploit.js
 index.html
@@ -95,5 +94,7 @@ README.md
 theme.css
 unified-theme.css
 
+background.png
+background.jpg
 NETWORK:
 *
