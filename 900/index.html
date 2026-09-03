@@ -118,7 +118,28 @@ h1,h2,h3{color:#f5fdff!important;text-shadow:0 0 10px rgba(32,217,255,.25)!impor
   color:#d9f8ff!important;
 }
 </style>
-</head>
+<style id="user-background">
+html,body{min-height:100%!important;margin:0!important}
+body{background-color:#020714!important;background-image:url("../background.png")!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;background-attachment:fixed!important}
+</style>
+
+<style id="small-start-status">
+#small-start-status{
+ position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+ z-index:2147483646;width:245px;min-height:105px;box-sizing:border-box;
+ padding:10px 12px;border:1px solid rgba(32,217,255,.75);
+ border-radius:10px;background:rgba(2,7,18,.82);
+ box-shadow:0 0 18px rgba(32,217,255,.16),inset 0 0 12px rgba(32,217,255,.05);
+ color:#eafcff;font:12px Arial,sans-serif;display:none;
+}
+#small-start-status .st{font-size:11px;color:#55eaff;margin-bottom:7px}
+#small-start-status .row{line-height:18px;color:#ccecf5}
+#small-start-status .ok{color:#5cff8a}
+</style>
+<style id="keep-original-background">html,body{min-height:100%;margin:0}body{background:#020714 url("../background.png") center/cover no-repeat fixed!important}</style><style id="exact-user-background">
+html,body{min-height:100%!important;margin:0!important;background:#020714!important;}
+body{background-image:url("../background.jpg")!important;background-size:cover!important;background-position:center center!important;background-repeat:no-repeat!important;background-attachment:fixed!important;}
+</style></head>
 <body>
 <div class="page">
   <div class="title">JAILBREAK <span>AMINE</span> PS4</div>
@@ -142,5 +163,14 @@ h1,h2,h3{color:#f5fdff!important;text-shadow:0 0 10px rgba(32,217,255,.25)!impor
   <div class="footer">PSFree-Lapse · PS4 9.00 · Haider</div>
 </div>
 <script type="module" src="./alert.mjs"></script>
+
+
+<div id="small-start-status" aria-hidden="true">
+  <div class="st">STATUS: <span>READY</span></div>
+  <div class="row">[+] Init</div>
+  <div class="row">[+] Patch</div>
+  <div class="row">[+] Payload</div>
+  <div class="row ok">✓ Done!</div>
+</div>
 </body>
 </html>
