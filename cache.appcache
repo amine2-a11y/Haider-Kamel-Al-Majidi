@@ -1,6 +1,6 @@
 CACHE MANIFEST
 
-# Main offline shell v20260828-preflight
+# Cache download fixed 2026-09-03-v2
 1000_1102/CSSFontFace.manifest
 1000_1102/includes/script.js
 1000_1102/includes/style.css
@@ -20,10 +20,10 @@ CACHE MANIFEST
 1000_1102/src/ps4/userland.js
 1000_1102/src/worker.js
 1000_1102/src/workers.js
-1150-1300/EXTRACTION_MANIFEST.json
 1150-1300/chain_lapse.js
 1150-1300/chain_poops.js
 1150-1300/core.js
+1150-1300/EXTRACTION_MANIFEST.json
 1150-1300/index.html
 1150-1300/int64.js
 1150-1300/mem.js
@@ -33,6 +33,7 @@ CACHE MANIFEST
 1150-1300/patches/1250.bin
 1150-1300/patches/1300.bin
 1150-1300/payload.bin
+1150-1300/PREFLIGHT.md
 1150-1300/ps4_offsets.js
 1150-1300/rpc_worker.js
 1150-1300/run_lapse.html
@@ -46,19 +47,16 @@ CACHE MANIFEST
 505_960/lapse.js
 505_960/main.js
 505_960/payload.bin
-505_960/ps4jb.cache
 505_960/psfree.js
 505_960/psfree_lapse_helpers.js
+900/about.html
 900/AIO_Fix_Temp/patch_aio.c
 900/AIO_Fix_Temp/vfs_aio2_pdtor.c
-900/COPYING
-900/LICENSE
-900/README.md
-900/about.html
 900/aio_patches.bin
 900/alert.mjs
 900/cache.html
 900/config.mjs
+900/COPYING
 900/fonts/FONTS.LICENSE
 900/fonts/LiberationMono-Regular.ttf
 900/fonts/README.txt
@@ -73,6 +71,7 @@ CACHE MANIFEST
 900/kpatch/types.h
 900/kpatch/utils.h
 900/lapse.mjs
+900/LICENSE
 900/module/chain.mjs
 900/module/constants.mjs
 900/module/int64.mjs
@@ -83,17 +82,16 @@ CACHE MANIFEST
 900/module/utils.mjs
 900/module/view.mjs
 900/psfree.mjs
-900/psfree_lapse.cache
+900/README.md
 900/rop/900.mjs
 900/send.mjs
-README.md
 background-music.js
 background.png
 extras/badhoist-6.72/672entrypoint.js
 extras/badhoist-6.72/672kexploit.js
 index.html
-index.html.bak
 music_background.mp3
+README.md
 theme.css
 unified-theme.css
 
