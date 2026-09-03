@@ -1,5 +1,5 @@
 <!doctype html>
-<html manifest="psfree_lapse.cache">
+<html manifest="../cache.appcache">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -18,7 +18,10 @@ h1{margin:0 0 8px;font-size:22px}h1 b{color:#168cff}
 .state{font-size:11px;color:#a8bbcc;min-height:16px}
 .bytes{font:10px "Courier New",monospace;color:#637f99;margin-top:10px}
 </style>
-</head>
+<style id="global-background-fix">
+html,body{min-height:100%;margin:0;}
+body{background-color:#020711 !important;background-image:url("../background.png") !important;background-size:cover !important;background-position:center center !important;background-repeat:no-repeat !important;background-attachment:fixed !important;}
+</style></head>
 <body>
 <div class="wrap"><div class="card">
 <div class="brand">PSFREE-LAPSE EXPLOIT</div>
@@ -62,7 +65,7 @@ function onProgress(e){
 function onCached(){finish();}
 function onUpdateReady(){try{app.swapCache();}catch(e){} finish();}
 function onNoUpdate(){state.textContent='Cache already installed.';finish();}
-function onError(){state.textContent='Cache error — retrying...';setTimeout(function(){location.reload();},1200);}
+function onError(){state.textContent='Cache error — check the connection and try again.';}
 
 app.addEventListener('checking',onChecking,false);
 app.addEventListener('downloading',onDownloading,false);
