@@ -1,4 +1,4 @@
-<html>
+<html manifest="../cache.appcache">
   <head>
     <meta charset="utf-8">
     <title>haider</title>
@@ -44,8 +44,8 @@
     <link rel="stylesheet" href="../theme.css">
 <link rel="stylesheet" href="../unified-theme.css">
 <style id="global-background-fix">
-html,body{min-height:100%;}
-body{background-image:url("../background.png") !important;background-size:cover !important;background-position:center center !important;background-repeat:no-repeat !important;background-attachment:fixed !important;}
+html,body{min-height:100%;margin:0;}
+body{background-color:#020711 !important;background-image:url("../background.png") !important;background-size:cover !important;background-position:center center !important;background-repeat:no-repeat !important;background-attachment:fixed !important;}
 </style></head>
   <body>
     <div class="container">
@@ -87,11 +87,7 @@ body{background-image:url("../background.png") !important;background-size:cover 
 </script>
 </body>
   <script>
-    // Clear history and prevent back navigation
-    history.replaceState(null, null, 'index.html');
-    var histlength = history.length;
-    history.go(-histlength);
-    // Logging utility
+// Logging utility
     var outputConsole = document.getElementById("console");
     window.log = function (msg) {
       outputConsole.textContent += msg + "\n";
@@ -121,4 +117,10 @@ body{background-image:url("../background.png") !important;background-size:cover 
     window.applicationCache.oncached = function(e) { DisplayCacheProgress(); };
     window.applicationCache.onupdateready = function(e) { DisplayCacheProgress(); };
   </script>
-</html>
+<script>
+(function(){var a=window.applicationCache;
+a.addEventListener("cached",function(){var o=document.getElementById("console");if(o)o.textContent+="[SUCCESS] Offline cache installed.\n";},false);
+a.addEventListener("error",function(){var o=document.getElementById("console");if(o)o.textContent+="[CACHE ERROR] Offline cache update failed.\n";},false);
+try{if(a.status===a.UNCACHED||a.status===a.IDLE)a.update();}catch(e){}
+})();
+</script></html>
