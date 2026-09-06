@@ -1,7 +1,20 @@
 CACHE MANIFEST
 
-# Use root UI cache
+# Complete offline cache for 11.50-13.00
 ../cache.appcache
+chain_lapse.js
+chain_poops.js
+core.js
+int64.js
+mem.js
+payload.bin
+ps4_offsets.js
+rpc_worker.js
+run_lapse.html
+run_poops.html
+patches/1100.bin
+patches/1150.bin
+patches/1200.bin
+patches/1250.bin
+patches/1300.bin
 
-NETWORK:
-*
