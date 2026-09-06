@@ -28,5 +28,22 @@ theme.css
 transparent-ui.css
 unified-theme.css
 
+# Complete 11.50-13.00 offline exploit assets
+1150-1300/chain_lapse.js
+1150-1300/chain_poops.js
+1150-1300/core.js
+1150-1300/int64.js
+1150-1300/mem.js
+1150-1300/payload.bin
+1150-1300/ps4_offsets.js
+1150-1300/rpc_worker.js
+1150-1300/run_lapse.html
+1150-1300/run_poops.html
+1150-1300/patches/1100.bin
+1150-1300/patches/1150.bin
+1150-1300/patches/1200.bin
+1150-1300/patches/1250.bin
+1150-1300/patches/1300.bin
+
 NETWORK:
 *
