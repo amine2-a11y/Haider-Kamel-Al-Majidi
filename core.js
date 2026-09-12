@@ -1241,7 +1241,7 @@ export function establishPrimitive(options) {
 
     if (fakeReleased)
         return Promise.reject(new Error(
-            "core: the fake cell has been released to the real-cell pair -- "
+            "core: the fake cell has been released to the real-cell pair "
             + "establishPrimitive cannot run again in this page"));
     if (running)
         return Promise.reject(new Error("core: already running"));

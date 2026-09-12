@@ -18,7 +18,7 @@ export const OPTIONAL_KEYS = [
     // key ("13.00" -> patches/1300.bin). Needed when two firmwares share one
     // kernel and therefore one blob.
     "kpatch",
-    // Names the firmware this block was copied from. Purely declarative -- no
+    // Names the firmware this block was copied from. Purely declarative no
     // page reads it. tools/checkfw.js needs it: its copy-paste detector flags
     // two firmwares sharing an RVA, and an alias shares EVERY RVA by
     // construction, so without this a correct alias reports as 20 defects and
@@ -393,13 +393,13 @@ export const PS4 = {
         k_scan_stage1:                      0x40000,
         k_scan_stage2:                      0x60000,
 
-        // KERNEL RVAs -- not derivable from userland modules. These are the
+        // KERNEL RVAs not derivable from userland modules. These are the
         // supplied 12.50 table, which is identical to our 13.00 row on every
         // key we carry. Not independently verified: there is no 12.50 kernel
         // dump here. step4q byte-gates sysent/jmp before firing either.
         //
         // The table also carries PRISON0 and ROOTVNODE. We deliberately do NOT
-        // store those -- chain_poops.js:1722 reads prison0 out of the live
+        // store those chain_poops.js:1722 reads prison0 out of the live
         // kernel via curproc->ucred->cr_prison, so a wrong constant cannot
         // exist to be wrong. Its EVF_OFFSET/TARGET_ID_OFFSET are 0 because
         // netctrl does not use them, which matches k_evf_cv below.
@@ -411,7 +411,7 @@ export const PS4 = {
 };
 
 // 12.02 IS 12.00 for everything this table describes. The 12.00 block's own
-// fw_status reads "kernel_rvas=verified-vs-kernel_1202.elf" -- those offsets
+// fw_status reads "kernel_rvas=verified-vs-kernel_1202.elf" those offsets
 // were derived from the 12.02 kernel in the first place. Same WebKit gadgets,
 // same kernel RVAs, same ten patch sites, so it takes the same blob
 // (patches/1200.bin) rather than a 1202.bin that does not exist.
@@ -426,12 +426,12 @@ PS4["12.02"] = Object.assign({}, PS4["12.00"], {
     kpatch: "1200.bin",
 });
 
-// 12.52 IS 12.50, per the supplied table -- same kernel row, and the WebKit
+// 12.52 IS 12.50, per the supplied table same kernel row, and the WebKit
 // side is taken from the single Lib_dump/12.50 module set because that is the
 // only 12.5x dump we have. The kernel half of that claim is consistent with
 // what we already believed (12.50's row equals 13.00's); the WebKit half is an
 // ASSERTION, not a measurement. If a 12.52 libSceNKWebKit.sprx ever turns up,
-// re-derive with tools/addfw.js and compare -- a moved anchor would fail at
+// re-derive with tools/addfw.js and compare a moved anchor would fail at
 // stage 1, loudly and harmlessly, rather than corrupting anything.
 //
 // Takes patches/1250.bin, since a 1252.bin does not exist.

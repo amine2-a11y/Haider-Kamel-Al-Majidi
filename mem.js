@@ -146,7 +146,7 @@ function write8(addr, value) {
             hi = 0;
         } else {
             throw new RangeError(
-                `mem.write8: ${value} exceeds 32 bits -- pass an int64`);
+                `mem.write8: ${value} exceeds 32 bits pass an int64`);
         }
     } else if (value !== null && typeof value === "object" && "low" in value) {
         const n = toI64(value);
@@ -371,7 +371,7 @@ function buildPairCarrier(fake) {
 
 function brokenCarrier(why) {
     const die = () => {
-        throw new Error("mem: the primitive is disabled -- the promotion failed "
+        throw new Error("mem: the primitive is disabled the promotion failed "
             + `and its rollback did not verify (${why})`);
     };
     return {
@@ -399,7 +399,7 @@ function proveMagic(note, who, slot, at, expected, context) {
         `at=0x${target.toString()}-found=${record.found}`
         + `-expected=${record.expected}-pass=${record.pass}-${context}`);
     if (!record.pass)
-        throw new Error(`mem.promote: ${who} identity failed -- read `
+        throw new Error(`mem.promote: ${who} identity failed read `
             + `${record.found} at 0x${target.toString()}, expected `
             + `${record.expected} (${context})`);
     return record;
@@ -477,7 +477,7 @@ export function promoteToRealPair(onEvent) {
         if (pairStatus.mainWindow !== fake.windowBytes)
             throw new Error(`mem.promote: the record's m_length (${pairStatus.mainWindow})`
                 + ` is not the carrier window (${fake.windowBytes})`
-                + " -- LENGTH_OFF does not hold on main");
+                + " LENGTH_OFF does not hold on main");
 
         mainView = fake.view;
         retained.push(mainView);
@@ -508,7 +508,7 @@ export function promoteToRealPair(onEvent) {
         for (let i = 0; i < 8; ++i) {
             if (mainView[MAIN_IDENT_OFFSET + i] !== mainMagic[i])
                 throw new Error("mem.promote: main's magic did not read back through "
-                    + "its own JS view -- the carrier is not at home");
+                    + "its own JS view the carrier is not at home");
         }
 
         const mainAddr = addrNumber(leakval(mainView));
@@ -530,7 +530,7 @@ export function promoteToRealPair(onEvent) {
             + `-at=0x${toI64(fake.fakeAddress + VECTOR_OFF).toString()}`);
         if (fromFakeSlot.low !== pairStatus.mainAddress.low
             || fromFakeSlot.hi !== pairStatus.mainAddress.hi)
-            throw new Error("mem.promote: main CELL identity failed -- the fake "
+            throw new Error("mem.promote: main CELL identity failed the fake "
                 + `cell's m_vector slot holds 0x${fromFakeSlot.toString()} but `
                 + `leakval(mainView) says 0x${pairStatus.mainAddress.toString()}`);
 
@@ -603,10 +603,10 @@ export function promoteToRealPair(onEvent) {
         pairStatus.workerLength = workerView.length;
 
         if (pairStatus.workerLength !== WORKER_LENGTH_MAX)
-            throw new Error("mem.promote: the m_length write did not land -- "
+            throw new Error("mem.promote: the m_length write did not land "
                 + `worker.length reads ${pairStatus.workerLength}`);
         if (workerMirror.length !== WORKER_BUFFER_SIZE)
-            throw new Error("mem.promote: the mirror was widened too -- the write "
+            throw new Error("mem.promote: the mirror was widened too the write "
                 + "went somewhere structural, not to worker's m_length");
         if (workerView[0] !== HOME_BYTE)
             throw new Error("mem.promote: worker no longer sees its own buffer");
@@ -757,7 +757,7 @@ export function installWindowP(c, options) {
         if (pairStatus.state === "broken") {
             globalThis.p = undefined;
             throw new Error("mem: the promotion failed AND its rollback did not "
-                + "verify -- window.p has been WITHDRAWN rather than published "
+                + "verify window.p has been WITHDRAWN rather than published "
                 + `mis-aimed. failedAt=${pairStatus.failedAt} ${pairStatus.error}`);
         }
     }

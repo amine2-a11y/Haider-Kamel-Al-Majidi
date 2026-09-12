@@ -25,7 +25,7 @@ function post(tag, detail) {
 
 const VERBOSE = params.get("verbose") === "1";
 const PROSE = [
-    / -- /, /\.\s/, /;\s/,
+    / /, /\.\s/, /;\s/,
     /,\s+(which|so|and that|because|since|as that)\s/,
     /\s+(because|rather than|instead of|so that|which is|which means|which the|so the)\s/,
     /\s+so\s+[a-z]/,
@@ -69,7 +69,7 @@ function check(name, ok, detail) {
 
 // Only what a dry sysctl read needs. The poops table lives between the head
 // and body ranges we extract, so it must be restated here or SYS is undefined
-// at runtime -- which node --check cannot see.
+// at runtime which node check cannot see.
 const SYS = { getpid: 20, getuid: 0x18, sysctl: 0xca };
 const JSVALUE_UNDEFINED = new int64(0x0a, 0xfffffff7);
 const keepAlive = [];
@@ -332,7 +332,7 @@ let allDone = false;
                     n === 0x10 && nz > 0, "len=" + n + " nonzero_bytes=" + nz);
             } else {
                 check("openpsid-readable-from-webkit-userland", false,
-                    "sysctl refused -- see the FAIL mark above");
+                    "sysctl refused see the FAIL mark above");
             }
         }
 
@@ -352,7 +352,7 @@ let allDone = false;
         }
 
         mark("UID", "uid=" + sc(SYS.getuid).i32 + " pid=" + sc(SYS.getpid).i32
-            + "   (unprivileged -- no kernel bug was used)");
+            + "   (unprivileged no kernel bug was used)");
         state("done", "ok");
         allDone = true;
 
@@ -361,7 +361,7 @@ let allDone = false;
         state("threw", "bad");
     } finally {
         // Put Math.expm1 back. This page arms nothing else, so this is the whole
-        // teardown -- no kernel object was touched and no fd was leaked.
+        // teardown no kernel object was touched and no fd was leaked.
         try {
             if (mainArmed && mainMf && mainOrig && p) {
                 p.write8(mainMf, mainOrig);

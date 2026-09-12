@@ -84,7 +84,7 @@ const api = {
         const h0 = dv.getUint32(0, true), h1 = dv.getUint32(4, true);
         if (h0 === 0 && h1 === 0) {
             wired = false;
-            throw new Error("leak cell header reads zero -- the wire did not take");
+            throw new Error("leak cell header reads zero the wire did not take");
         }
         return [h0, h1];
     },
