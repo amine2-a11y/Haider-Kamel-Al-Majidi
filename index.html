@@ -1119,7 +1119,8 @@ body::after {
 
 
     /*
-     * انتظار الضغط
+     * التشغيل التلقائي
+     * لا حاجة للضغط على الشاشة
      */
 
     function waitForTap(msg, action) {
@@ -1129,36 +1130,7 @@ body::after {
             "warn"
         );
 
-
-        function fire() {
-
-            window.removeEventListener(
-                "click",
-                fire
-            );
-
-
-            window.removeEventListener(
-                "keydown",
-                fire
-            );
-
-
-            action();
-
-        }
-
-
-        window.addEventListener(
-            "click",
-            fire
-        );
-
-
-        window.addEventListener(
-            "keydown",
-            fire
-        );
+        setTimeout(action, 120);
 
     }
 
