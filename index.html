@@ -1,48 +1,31 @@
 <!DOCTYPE html>
-<html manifest="host.manifest"><head>
-<title>PS4 HOST</title>
+<html manifest="host.manifest">
+<head>
+<meta charset="utf-8">
+<title>PS4 HOST • Auto Detect</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="card">
+<div class="badge">PS4 • AUTO DETECT</div>
+<h1 id="msgs">جاري التعرف على نظام PS4...</h1>
+<div class="subtitle">سيتم اختيار المسار المناسب تلقائياً وبدء الجيلبريك بعد فتح الكاش.</div>
 <script>
-var histlength=history.length;history.go(-histlength 2);
-</script>
-<div class="badge">PS4 • WEBKIT HOST</div>
-<h1 id=msgs> PS4 HOST/h1>
-<div class="subtitle">واجهة حديثة وبسيطة لاختيار نظام جهازك</div>
-
-<br>
-<div id=menu>
-<h1 class="section-title">اختر نظام جهازك</h1>
-
-<br>
-<a href="g2all/index.html"><button class="btn" onmouseover="msgs.innerHTML='PS4 7.00 - 13.00 FW GoldHEN Host'"> GoldHEN • أنظمة PS4 المدعومة </button></a>
-
-
-<div class="footer">واجهة محلية • تصميم احترافي</div>
-</div>
-<div id=crypto>
-<h1 style="font-size: 18px;color: yellow;">افتح الكامره</h1>
-<img src="btc.jpg" width="150" height="150">
-<br>
-<h1 style="font-size: 18px;"></h1>
-<br>
-<h1 style="font-size: 18px;color: yellow;">افتح الكامره </h1>
-<img src="eth.jpg" width="150" height="150">
-<h1 style="font-size: 18px;"></h1>
-<button class="btn" onclick="load_menu()"> رجوع </button>
-</div>
-<script>
-function donations(){
-document.getElementById("crypto").style.display = "block";
-document.getElementById("menu").style.display = "none";
-}
-
-function load_menu(){
-document.getElementById("menu").style.display = "block";
-document.getElementById("crypto").style.display = "none";
-}
+(function () {
+  "use strict";
+  const m = navigator.userAgent.match(/PlayStation 4[ \/]([0-9]+\.[0-9]+)/i);
+  const el = document.getElementById("msgs");
+  if (!m) {
+    el.textContent = "لم يتم التعرف على جهاز PS4";
+    return;
+  }
+  const fw = parseFloat(m[1]);
+  el.textContent = "PS4 Firmware " + m[1] + " • جاري التشغيل التلقائي...";
+  // The firmware-specific host performs the exploit automatically.
+  setTimeout(function () {
+    location.replace("g2all/index.html");
+  }, 250);
+})();
 </script>
 </div>
 </body>
